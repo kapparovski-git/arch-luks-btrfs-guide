@@ -1,6 +1,6 @@
 # Custom Arch Linux Setup (LUKS + Btrfs + i3)
 
-A minimal, secure, and keyboard-driven Arch Linux installation configuration built from bare metal. I tried to explain as much as I could everything. If there is a $ sign is a command or a value that needs to be put in configuration files, -> are just plain and simple explanations. Goes without saying that to start this installation process a USB with a Arch Linux image is needed. This build gives you the opportunityto make old machines lightning fast, minimum requirements are electricity, internet connection and patience. NO minimum hardware requirements!
+A minimal, secure, and keyboard-driven Arch Linux installation configuration built from bare metal. I tried to explain as much as I could everything. If there is a $ sign is a command or a value that needs to be put in configuration files, -> are just plain and simple explanations. Goes without saying that to start this installation process a USB with a Arch Linux image is needed. This build gives you the opportunity to make any machine lightning fast, minimum requirements are electricity, internet connection and patience. NO minimum hardware requirements!
 
 ---
 
@@ -10,8 +10,8 @@ A minimal, secure, and keyboard-driven Arch Linux installation configuration bui
 * **Filesystem:** Btrfs (with subvolumes '@' and '@home', compressed with 'zstd')
 * **Encryption:** LUKS (Full-disk encryption)
 * **Window Manager:** i3-wm (Tiling)
-* **Terminal Emulator:** Alacritty (Pitch-black background, custom neon padding)
-* **Shell:** Zsh + Starship prompt + Syntax Highlighting
+* **Terminal Emulator:** Alacritty
+* **Shell:** Bash
 * **Audio:** Pipewire + WirePlumber
 
 ---
@@ -106,7 +106,7 @@ On other machine:
 * **$ pacman -S reflector
 * **$ reflector --country [your_country] --protocol https --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
 ### 8.4 Install i3 & essential utilities
-* **$ pacman -S i3-wm i3status i3lock dmenu alacritty xorg xorg-xinit sudo
+* **$ pacman -S i3-wm i3status i3lock dmenu alacritty xorg xorg-xinit sudo pipewire wireplumber
 ### 8.5 Create non-root user
 * **$ useradd -m -G sudo -s /bin/bash [username]
 * **$ passwd [username]
