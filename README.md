@@ -49,13 +49,17 @@ On other machine:
 ### 3.3 Format unlocked container as btrfs
 * **$ mkfs.btrfs /dev/mapper/cryptroot
 ### 3.4 Create btrfs subvolumes by mounting raw btrfs filesystem temporarily (@ for root, @home for personal files)
+* **$ mount /dev/mapper/cryptroot /mnt
+* **$ btrfs subvolume create /mnt/@
+* **$ btrfs subvolume create /mnt/@home
+* **$ umount /mnt
 * **$ mount -o subvol=@,noatime,compress=zstd /dev/mapper/cryptroot /mnt
 * **$ mkdir -p /mnt/home
 * **$ mount -o subvol=@home,noatime,compress=zstd /dev/mapper/cryptroot /mnt/home
 * **$ mkdir -p /mnt/boot
 * **$ mount /dev/nvme0n1p1 /mnt/boot
 ### 3.5 Install Arch Linux kernel by using script pacstrap that installs packages to the specified new root directory, /mnt is the target mount point where new Arch file system (btrfs subvolumes) is mounted, base is the foundational package group for an Arch system (core utilities, pacman, etc.), linux is the actual kernel and its modules, linux-firmware is the essential firmware files for hardware drivers (wifi, graphics, etc.), btrfs-progs are the utilities needed to manage and work with the btrfs filesystem.
-* **$ pacstrap /mnt base linux linux-firmware btrfs-progs
+* **$ pacstrap /mnt base linux linux-firmware btrfs-progs networkmanager
 ### 3.6 Generate the filesystem table (fstab)
 * **$ genfstab -U /mnt >> /mnt/etc/fstab
 ### 3.7 Check the file generated
@@ -74,7 +78,7 @@ On other machine:
 ### 6. Set root password
 * **$ passwd
 ### 7. Configure the initramfs (crucial for encryption!) since the root drive is encrypted with LUKS, the linux kernel needs to know how to decrypt it before it tries to mount the filesystem, let's open th mkinitcpio configuration file, find the HOOKS="" line and change it, save, exit and regenerate the initramfs image. Do not forget in next steps to change the MODULES line as well and uncomment line to enable LUKS!
-* **$ pacman -S nano
+* **$ pacman -S nano iwd
 * **$ nano /etc/mkinitcpio.conf -> $MODULES=(nvme btrfs) $HOOKS=(base udev autodetect microcode modconf block encrypt filesystems fsck);
 * **$ mkinitcpio -P -> Rebuilds initramfs image
 ### 7.1 Install bootloader GRUB
@@ -85,13 +89,6 @@ On other machine:
 * **$ nano /etc/default/grub -> Boot parameters: enable GRUB_ENABLE_CRYPTODISK=y, configure kernel parameter to decrypt disk at boot using LUKS partition UUID: $ GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet cryptdevice=UUID=[YOUR_UUID]:cryptroot root=/dev/mapper/cryptroot"
 ### 7.3 Generate GRUB configuration file
 * **$ grub-mkconfig -o /boot/grub/grub.cfg
-### 7.4 (Troubleshooter optional step: If chroot is missing internet)
-* **$ exit
-* **$ cp /etc/resolv.conf /mnt/etc/resolv.conf
-### 7.5 (Troubleshooter optional step: Chroot back into the system)
-* **$ arch-chroot /mnt
-### 8 Install network manager & iwd
-* **$ pacman -S networkmanager iwd
 ### 8.1 Enable network manager
 * **$ systemctl enable NetworkManager
 * **$ exit
@@ -108,9 +105,10 @@ On other machine:
 ### 8.4 Install i3 & essential utilities
 * **$ pacman -S i3-wm i3status i3lock dmenu alacritty xorg xorg-xinit sudo
 ### 8.5 Create non-root user
-* **$ useradd -m -G sudo -s /bin/bash [username]
+* **$ useradd -m -G wheel -s /bin/bash [username]
 * **$ passwd [username]
-### 8.6 Give user sudo privileges by uncommenting the '%sudo ALL=(ALL:ALL) ALL' line through $EDITOR=nano visudo
+### 8.6 Give user sudo privileges by uncommenting the '%wheel ALL=(ALL:ALL) ALL' line through $EDITOR=nano visudo
 ### 8.7 To make xorg automatically launch i3 when you type 'startx', add this line to your user's home profile
+* **$ su - [username]
 * **$ echo "exec i3" >> ~/.xinitrc
 * **$ startx
