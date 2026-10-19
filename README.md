@@ -4,6 +4,11 @@ A minimal, secure, and keyboard-driven Arch Linux installation built from bare m
 
 ---
 
+<img width="1920" height="1062" alt="image" src="https://github.com/user-attachments/assets/f5fb2907-dc5f-441c-80b0-b251439fb608" />
+
+
+---
+
 ## Architecture & Features
 
 * **Firmware:** UEFI with GRUB bootloader
