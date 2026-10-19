@@ -378,5 +378,8 @@ All snapshots reside in `/.snapshots/<ID>/snapshot/`. If a configuration file ge
 ```bash
 sudo cp /.snapshots/<SNAPSHOT_ID>/snapshot/etc/<config_file> /etc/<config_file>
 ```
+## Window Manager & Environment
+
+The installation sets up basic `i3` and `alacritty` packages. For the exact keybindings, status bar configs, and color schemes used on this system, see my [dotfiles repository](https://github.com/kapparovski-git/dotfiles).
 
 LFG!
