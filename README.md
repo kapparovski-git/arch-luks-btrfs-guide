@@ -272,3 +272,106 @@ if [ -z "$DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
     exec startx
 fi
 ```
+
+### 9. Post-Installation: Automated Snapshots & Rollback Protection
+
+Because this setup uses a Btrfs filesysem, you can create instant system snapshots using Copy-on-Write (CoW). Snapshots take zero additional disk space when created-storage is only consumed as files are modified or deleted over time.
+
+We use **Snapper** paired with **snap-pac** so that Arch automatically captures a snapshot before and after every single `pacman` transacttion. If a rolling update breaks your system, you can inspect changes and restore files within seconds.
+
+---
+
+### 1. Install Snapper & Pacman Hook
+
+Install Snapper along with `snap-pac`:
+
+```bash
+sudo pacman -S snapper snap-pac
+```
+
+---
+
+### 2. Configure Snapper for the Root Filesystem
+
+Create a Snapper configuration profile targeting your root (`/`) subvolume:
+
+```bash
+sudo snapper -c root create-config /
+```
+
+Verify that the `root` profile was generated:
+
+```bash
+sudo snapper list-configs
+```
+
+---
+
+### 3. Configure Snapshots Retention & Cleanup
+
+By default, Snapper keeps an excessive number of hourly and daily snapshots. To prevent your drive fromfilling up quietly, adjust the timeline retention settings.
+
+Edit `/etc/snapper/configs/root`:
+
+```bash
+sudo nano /etc/snapper/configs/root
+```
+
+Adjust the following limits to lean defaults:
+
+```text
+TIMELINE_LIMIT_HOURLY="5"
+TIMELINE_LIMIT_DAILY="7"
+TIMELINE_LIMIT_WEEKLY="2"
+TIMELINE_LIMIT_MONTHLY="0"
+TIMELINE_LIMIT_YEARLY="0"
+```
+
+Enable and start the background cleanup timers:
+
+```bash
+sudo systemctl enable --now snapper-timeline.timer
+sudo systemctl enable --now snapper-cleanup.timer
+```
+
+---
+
+### 4. How It Works: Hands-on Usage
+
+#### Automatic Snapshots on Update
+You do not need to trigger backups manually for updates. Whenever you run:
+
+```bash
+sudo pacman -Syu
+```
+
+`snap-pac` automatically creates a `pre` snapshot (snapshot state right before packages install) and a `post` snapshot (state right after completion).
+
+#### View All Saved Snapshots
+List existing snapshots and their IDs:
+
+```bash
+sudo snapper -c root list
+```
+
+#### Inspect Changes Between Snapshots (Diffing)
+To see every file added (`+`), modified (`c`), or deleted (`-`) between snapshot 1 and your current live system (`0`):
+
+```bash
+sudo snapper -c root status 1..0
+```
+
+To see the exact code or config diff of a specific file:
+
+```bash
+sudo snapper -c root diff 1..0 /etc/fstab
+```
+
+#### Recovering a Broken File
+All snapshots reside in `/.snapshots/<ID>/snapshot/`. If a configuration file gets corrupted, copy the working version directly out of the desired snapshot:
+
+```bash
+sudo cp /.snapshots/<SNAPSHOT_ID>/snapshot/etc/<config_file> /etc/<config_file>
+```
+
+LFG!
