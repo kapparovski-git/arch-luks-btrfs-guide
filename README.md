@@ -128,7 +128,7 @@ mkdir -p /mnt/boot
 mount /dev/nvme0n1p1 /mnt/boot
 ```
 
-### 3.5 Install Base System & Firmware
+### 4. Install Base System & Firmware
 
 Install the essential base packages, kernel, filesystem tools, networking, and microcode:
 
@@ -137,7 +137,7 @@ Install the essential base packages, kernel, filesystem tools, networking, and m
 pacstrap /mnt base linux linux-firmware btrfs-progs nano networkmanager <ucode-package>
 ```
 
-### 3.6 Generate Fstab & Enter System
+### 5. Generate Fstab & Enter System
 
 Generate the filesystem table using UUIDs and enter the new installation:
 
@@ -146,7 +146,7 @@ genfstab -U /mnt >> /mnt/etc/fstab
 arch-chroot /mnt
 ```
 
-### 3.9 Set timezone, language, hostname & root password
+### 6. Set timezone, language, hostname & root password
 
 ```bash
 # Replace <continent> and <city> accordingly
