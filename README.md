@@ -4,7 +4,8 @@ A minimal, secure, and keyboard-driven Arch Linux installation built from bare m
 
 ---
 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/6f0eb8dd-fade-4176-bb95-07301f992fbd" />
+<img width="1920" height="1062" alt="image" src="https://github.com/user-attachments/assets/f5fb2907-dc5f-441c-80b0-b251439fb608" />
+
 
 ---
 
