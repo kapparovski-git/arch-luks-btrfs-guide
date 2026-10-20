@@ -25,7 +25,7 @@ A minimal, secure, and keyboard-driven Arch Linux installation built from bare m
 
 Before starting, ensure you have:
 1. **Target Hardware:** A 64-bit x86_64 machine with UEFI support (Secure Boot disabled in BIOS/firmware settings).
-2. **Installation Media:** A bootable USB flash drivr with the latest official [Arch Linux ISO](https://archlinux.org/download/).
+2. **Installation Media:** A bootable USB flash drive with the latest official [Arch Linux ISO](https://archlinux.org/download/).
 3. **Internet Access:** Active Ethernet or Wi-Fi available at the installation site.
 4. **Data Backup:** This installation completely overwrites the target disk. Back up any essential data before proceeding.
 
@@ -98,7 +98,7 @@ n           -> Create partition 2 (Root LUKS)
 
 w           -> Write changes and exit fdisk automatically
 ```
-### 3.1 Format partitions & create btrfs subvolumes by mounting raw btrfs filesystem temporarily (@ forroot, @home for personal files)
+### 3.1 Format partitions & create btrfs subvolumes by mounting raw btrfs filesystem temporarily (@ for root, @home for personal files)
 
 ```bash
 # Format EFI partition as FAT32
@@ -314,7 +314,7 @@ sudo snapper list-configs
 
 ### 3. Configure Snapshots Retention & Cleanup
 
-By default, Snapper keeps an excessive number of hourly and daily snapshots. To prevent your drive fromfilling up quietly, adjust the timeline retention settings.
+By default, Snapper keeps an excessive number of hourly and daily snapshots. To prevent your drive from filling up quietly, adjust the timeline retention settings.
 
 Edit `/etc/snapper/configs/root`:
 
